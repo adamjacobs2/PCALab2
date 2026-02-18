@@ -1,6 +1,6 @@
 CC = mpicc
 CFLAGS = -Wall
-TARGETS = gatherv.c scatterv.c
+TARGETS = main.c
 
 
 .PHONY: all clean
