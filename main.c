@@ -3,9 +3,31 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
-
+#include <time.h>
 int rank, size;
 int *sendcounts, *inputDispls, *outputDispls;
+
+
+
+/*   ttype: type to use for representing time */
+typedef double ttype;
+ttype tdiff(struct timespec a, struct timespec b)
+/* Find the time difference. */
+{
+  ttype dt = (( b.tv_sec - a.tv_sec ) + ( b.tv_nsec - a.tv_nsec ) / 1E9);
+  return dt;
+}
+
+struct timespec now()
+/* Return the current time. */
+{
+  struct timespec t;
+  clock_gettime(CLOCK_REALTIME, &t);
+  return t;
+}
+
+struct timespec begin, end;
+double time_spent;
 
 void initialize_data(uint8_t *A, int N) {
     srand(1);
