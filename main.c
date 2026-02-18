@@ -5,8 +5,14 @@
 #include <string.h>
 #include <time.h>
 int rank, size;
-int *sendcounts, *inputDispls, *outputDispls;
+int *sendcounts, *recvcounts;
+int *inputDispls, *outputDispls;
 
+
+
+
+// Timing functions
+/*************************************************** */
 
 
 /*   ttype: type to use for representing time */
@@ -26,9 +32,17 @@ struct timespec now()
   return t;
 }
 
+
+
+
 struct timespec begin, end;
 double time_spent;
+/*************************************************** */
 
+
+
+//Lab 2 functions
+/*************************************************** */
 void initialize_data(uint8_t *A, int N) {
     srand(1);
     for (int i = 0; i < N * N; i++) {
@@ -38,6 +52,7 @@ void initialize_data(uint8_t *A, int N) {
 
 uint8_t* distribute_data(uint8_t *A, int N) {
     sendcounts = malloc(sizeof(int) * size);
+    recvcounts = malloc(sizeof(int) * size);
     inputDispls = malloc(sizeof(int) * size);
     outputDispls = malloc(sizeof(int) * size);
     
@@ -47,8 +62,8 @@ uint8_t* distribute_data(uint8_t *A, int N) {
     for (int i = 0; i < size; i++) {
         int outputRows = (N-2) / size + (i < rem ? 1 : 0);
         int inputRows = outputRows + 2;
-        
         sendcounts[i] = inputRows * N;
+        recvcounts[i] = outputRows * N;
         inputDispls[i] = sum;
         outputDispls[i] = sum + N;
         sum += outputRows* N;
@@ -124,7 +139,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
 
 void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap) {
     
-    MPI_Gatherv(updated_buff, sendcounts[rank] - 2*N, MPI_UINT8_T, 
+    MPI_Gatherv(updated_buff, recvcounts[rank], MPI_UINT8_T, 
                 Ap, sendcounts, outputDispls, MPI_UINT8_T, 
                 0, MPI_COMM_WORLD);
 
@@ -141,6 +156,8 @@ void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap) {
         }
     }
 }
+/*************************************************** */
+
 
 int main(int argc, char **argv) {
     MPI_Init(&argc, &argv);
@@ -173,6 +190,7 @@ int main(int argc, char **argv) {
         free(Ap);
     }
     free(sendcounts);
+    free(recvcounts);
     free(inputDispls);
     free(outputDispls);
     free(temp1);
