@@ -12,4 +12,4 @@
 #SBATCH -t 00:05:00
 #SBATCH -o myoutput
 #SBATCH -e myerr
-srun --mpi=$HPC_PMIX ./main
+srun --mpi=$HPC_PMIX ./main 10
