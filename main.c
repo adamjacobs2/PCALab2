@@ -37,6 +37,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
             for (int j = 0; j < N; j++) {
                 printf ("%d\t", data [i][j]);
             }
+            printf ("\n");
         }
         printf ("\n");
     }
@@ -46,6 +47,18 @@ uint8_t* distribute_data(uint8_t *A, int N) {
     // Distribute data from A (on rank 0) to all local_bufs
     
     MPI_Scatterv(A, sendcounts, displs, MPI_UINT8_T, local_buf, sendcounts[rank], MPI_UINT8_T, 0, MPI_COMM_WORLD);
+
+
+    printf ("\n");
+    printf ("rank %d recv buff:", rank);
+
+    uint8_t (*data)[N] = (uint8_t (*)[N]) local_buf;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                printf ("%d\t", data [i][j]);
+            }
+            printf ("\n");
+        }
     
     return local_buf;
 }
