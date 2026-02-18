@@ -29,6 +29,16 @@ uint8_t* distribute_data(uint8_t *A, int N) {
 
     if (rank == 0) {
         initialize_data(A, N);
+        printf ("\n");
+        printf ("%d X %d data array:", N, N);
+        printf ("\n");       
+        uint8_t (*data)[N] = (uint8_t (*)[N]) A;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                printf ("%d\t", data [i][j]);
+            }
+        }
+        printf ("\n");
     }
 
     uint8_t* local_buf = malloc(sendcounts[rank] * sizeof(uint8_t));
