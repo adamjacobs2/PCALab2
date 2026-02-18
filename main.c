@@ -109,7 +109,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
     int local_rows = (sendcounts[rank] / N) - 2;
     uint8_t (*data)[N] = (uint8_t (*)[N]) recv_buff;
     
-    uint8_t* ptr = calloc(sendcounts[rank] - 2*N, sizeof(uint8_t)); 
+    uint8_t* ptr = calloc(recvcounts[rank], sizeof(uint8_t)); 
 
     uint8_t (*result)[N] = (uint8_t (*)[N]) ptr;
 
@@ -144,7 +144,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
 void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap) {
     
     MPI_Gatherv(updated_buff, recvcounts[rank], MPI_UINT8_T, 
-                Ap, sendcounts, outputDispls, MPI_UINT8_T, 
+                Ap, recvcounts, outputDispls, MPI_UINT8_T, 
                 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
