@@ -80,7 +80,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
             sum = data[i-1][j-1] +   data[i-1][j] +   data[i-1][j+1] +
                       data[i][j-1]   + 2*data[i][j]   +   data[i][j+1]   +
                       data[i+1][j-1] +   data[i+1][j] +   data[i+1][j+1];
-            result[i-1][j-1] = (uint8_t)(sum / 10);
+            result[i-1][j] = (uint8_t)(sum / 10);
         }
     }
 
