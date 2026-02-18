@@ -21,10 +21,11 @@ uint8_t* distribute_data(uint8_t *A, int N) {
     int rem = N % size;
     int sum = 0;
     for (int i = 0; i < size; i++) {
-        int rows = (N / size) + (i < rem ? 1 : 0);
-        sendcounts[i] = rows * N + 2*N;
+        int rows = (N / size) + (2*N) + (i < rem ? 1 : 0);
+        if(i == 0) rows--;
+        sendcounts[i] = rows * N;
         displs[i] = sum;
-        sum += rows * N - N;
+        sum += (rows-1) * N;
     }
 
     if (rank == 0) {
