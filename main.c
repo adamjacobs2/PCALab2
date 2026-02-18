@@ -90,7 +90,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
     
     for (int i = 0; i < sendcounts[rank] / N; i++) {
         for (int j = 0; j < N; j++) {
-            printf ("%d\t", data [i][j]);
+            printf ("%d\t", result [i][j]);
         }
         printf ("\n");
     }
