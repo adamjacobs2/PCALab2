@@ -74,7 +74,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
     uint8_t (*result)[N] = (uint8_t (*)[N]) ptr;
 
     int sum; 
-    for (int i = 1; i < local_rows - 1; i++) {
+    for (int i = 1; i < local_rows + 1; i++) {
         for (int j = 1; j < N - 1; j++) {
             sum = data[i-1][j-1] +   data[i-1][j] +   data[i-1][j+1] +
                       data[i][j-1]   + 2*data[i][j]   +   data[i][j+1]   +
