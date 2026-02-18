@@ -67,7 +67,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
 }
 
 uint8_t* mask_operation(uint8_t *recv_buff, int N) {
-    int local_rows = sendcounts[rank] / N;
+    int local_rows = (sendcounts[rank] / N) - 2;
     uint8_t (*data)[N] = (uint8_t (*)[N]) recv_buff;
     
     uint8_t* ptr = malloc(sendcounts[rank] * sizeof(uint8_t)); 
