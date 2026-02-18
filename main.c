@@ -51,7 +51,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
     
     // Distribute data from A (on rank 0) to all local_bufs
     
-    MPI_Scatterv(A, sendcounts, displs, MPI_UINT8_T, local_buf, sendcounts[rank], MPI_UINT8_T, 0, MPI_COMM_WORLD);
+    MPI_Scatterv(A, sendcounts, inputDispls, MPI_UINT8_T, local_buf, sendcounts[rank], MPI_UINT8_T, 0, MPI_COMM_WORLD);
 
 
     printf ("\n");
@@ -103,7 +103,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
 void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap) {
     
     MPI_Gatherv(updated_buff, sendcounts[rank] - 2*N, MPI_UINT8_T, 
-                Ap, sendcounts, displs, MPI_UINT8_T, 
+                Ap, sendcounts, outputDispls, MPI_UINT8_T, 
                 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
@@ -151,7 +151,8 @@ int main(int argc, char **argv) {
         free(Ap);
     }
     free(sendcounts);
-    free(displs);
+    free(inputDispls);
+    free(outputDispls);
     free(temp1);
     free(temp2);
 
