@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
     // ONLY Rank 0 allocates the master memory
     if (rank == 0) {
         A = malloc(N * N * sizeof(uint8_t));
-        Ap = malloc(N * N * sizeof(uint8_t));
+        Ap = calloc(N * N, sizeof(uint8_t));
     }
 
     uint8_t *temp1 = distribute_data(A, N);
