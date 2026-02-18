@@ -70,7 +70,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
     int local_rows = (sendcounts[rank] / N) - 2;
     uint8_t (*data)[N] = (uint8_t (*)[N]) recv_buff;
     
-    uint8_t* ptr = malloc(sendcounts[rank] * sizeof(uint8_t)); 
+    uint8_t* ptr = calloc(sendcounts[rank], sizeof(uint8_t)); 
     uint8_t (*result)[N] = (uint8_t (*)[N]) ptr;
 
     int sum; 
