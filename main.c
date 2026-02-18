@@ -71,8 +71,10 @@ uint8_t* distribute_data(uint8_t *A, int N) {
 
     if (rank == 0) {
         initialize_data(A, N);
+
+#ifndef TIMING
         printf ("\n");
-        printf ("%d X %d data array:", N, N);
+        printf ("%d X %d data matrix:", N, N);
         printf ("\n");       
         uint8_t (*data)[N] = (uint8_t (*)[N]) A;
         for (int i = 0; i < N; i++) {
@@ -82,6 +84,8 @@ uint8_t* distribute_data(uint8_t *A, int N) {
             printf ("\n");
         }
         printf ("\n");
+        fflush(stdout);
+#endif
     }
 
     uint8_t* local_buf = malloc(sendcounts[rank] * sizeof(uint8_t));
@@ -91,6 +95,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
     MPI_Scatterv(A, sendcounts, inputDispls, MPI_UINT8_T, local_buf, sendcounts[rank], MPI_UINT8_T, 0, MPI_COMM_WORLD);
 
 
+#ifndef TIMING
     printf ("\n");
     printf ("rank %d recv buff:\n", rank);
 
@@ -101,7 +106,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
             }
             printf ("\n");
         }
-    
+#endif
     return local_buf;
 }
 
@@ -129,7 +134,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
         }
     }
 
-
+#ifndef TIMING
     printf ("\n");
     printf ("rank %d result:\n", rank);
 
@@ -140,6 +145,8 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
         }
         printf ("\n");
     }
+    fflush(stdout);
+#endif
     return ptr;
 }
 
@@ -158,7 +165,7 @@ void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap, uint8_t* A) {
             result[0][j] = Aptr[0][j];
             result[N-1][j] = Aptr[0][j];
         }
-        
+#ifndef TIMING
         printf("Updated Data Matrix\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -167,21 +174,21 @@ void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap, uint8_t* A) {
             }
             printf("\n");
         }
+        fflush(stdout);
+#endif
     }
 }
 /*************************************************** */
 
 
 int main(int argc, char **argv) {
+
+
+
+    begin = now();
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-    if (argc < 2) {
-        if (rank == 0) printf("Usage: %s <N>\n", argv[0]);
-        MPI_Finalize();
-        return 1;
-    }
 
     int N = atoi(argv[1]);
     uint8_t *A = NULL;
@@ -196,6 +203,12 @@ int main(int argc, char **argv) {
     uint8_t *temp1 = distribute_data(A, N);
     uint8_t *temp2 = mask_operation(temp1, N);
     collect_results(temp2, N, Ap, A);
+
+    end = now();
+    time_spent = tdiff(begin, end);
+
+    printf("Time spent: %f\n", time_spent);
+    fflush(stdout);
 
     // Cleanup
     if (rank == 0) {
