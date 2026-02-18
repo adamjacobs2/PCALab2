@@ -50,10 +50,10 @@ uint8_t* distribute_data(uint8_t *A, int N) {
 
 
     printf ("\n");
-    printf ("rank %d recv buff:", rank);
+    printf ("rank %d recv buff:\n", rank);
 
     uint8_t (*data)[N] = (uint8_t (*)[N]) local_buf;
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < sendcounts[rank]; i++) {
             for (int j = 0; j < N; j++) {
                 printf ("%d\t", data [i][j]);
             }
