@@ -25,7 +25,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
         if(i == 0 || i == size -1) rows--;
         sendcounts[i] = rows * N;
         displs[i] = sum;
-        sum += (rows-1) * N;
+        sum += (rows - 2) * N;
     }
 
     if (rank == 0) {
