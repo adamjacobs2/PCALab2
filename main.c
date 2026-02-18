@@ -145,6 +145,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
         }
         printf ("\n");
     }
+    printf("\n");
     fflush(stdout);
 #endif
     return ptr;
@@ -165,6 +166,12 @@ void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap, uint8_t* A) {
             result[0][j] = Aptr[0][j];
             result[N-1][j] = Aptr[0][j];
         }
+
+        end = now();
+        time_spent = tdiff(begin, end);
+
+        printf("Time spent: %f\n", time_spent);
+        fflush(stdout);
 #ifndef TIMING
         printf("Updated Data Matrix\n");
         for (int i = 0; i < N; i++) {
@@ -203,12 +210,6 @@ int main(int argc, char **argv) {
     uint8_t *temp1 = distribute_data(A, N);
     uint8_t *temp2 = mask_operation(temp1, N);
     collect_results(temp2, N, Ap, A);
-
-    end = now();
-    time_spent = tdiff(begin, end);
-
-    printf("Time spent: %f\n", time_spent);
-    fflush(stdout);
 
     // Cleanup
     if (rank == 0) {
