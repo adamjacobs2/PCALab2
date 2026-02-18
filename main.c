@@ -18,14 +18,16 @@ uint8_t* distribute_data(uint8_t *A, int N) {
     sendcounts = malloc(sizeof(int) * size);
     displs = malloc(sizeof(int) * size);
     
-    int rem = N % size;
+    int rem = (N - 2) % size;
+ 
     int sum = 0;
     for (int i = 0; i < size; i++) {
-        int rows = (N / size) + 2 + (i < rem ? 1 : 0);
-        if(i == 0 || i == size -1) rows--;
-        sendcounts[i] = rows * N;
+        int outputRows = (N-2) / size + (i < rem ? 1 : 0);
+        int inputRows = outputRows + 2;
+        
+        sendcounts[i] = inputRows * N;
         displs[i] = sum;
-        sum += (rows - 2) * N;
+        sum += outputRows;
     }
 
     if (rank == 0) {
