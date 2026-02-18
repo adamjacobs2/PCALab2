@@ -28,7 +28,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
         
         sendcounts[i] = inputRows * N;
         inputDispls[i] = sum;
-        outputDispls[i] = sum + 1;
+        outputDispls[i] = sum + N;
         sum += outputRows* N;
     }
 
