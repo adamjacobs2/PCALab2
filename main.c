@@ -114,7 +114,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
     uint8_t (*result)[N] = (uint8_t (*)[N]) ptr;
 
     int sum; 
-    for (int i = 1; i < local_rows - 1; i++) {
+    for (int i = 1; i <= local_rows; i++) {
         for (int j = 0; j < N; j++) {
 	    // Handle vertical boundaries (left and right columns)
         if (j == 0 || j == N - 1) {
