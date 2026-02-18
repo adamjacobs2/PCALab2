@@ -5,7 +5,7 @@
 #include <string.h>
 
 int rank, size;
-int *sendcounts, *displs;
+int *sendcounts, *inputDispls, *outputDispls;
 
 void initialize_data(uint8_t *A, int N) {
     srand(1);
@@ -16,7 +16,8 @@ void initialize_data(uint8_t *A, int N) {
 
 uint8_t* distribute_data(uint8_t *A, int N) {
     sendcounts = malloc(sizeof(int) * size);
-    displs = malloc(sizeof(int) * size);
+    inputDispls = malloc(sizeof(int) * size);
+    outputDispls = malloc(sizeof(int) * size);
     
     int rem = (N - 2) % size;
  
@@ -26,7 +27,8 @@ uint8_t* distribute_data(uint8_t *A, int N) {
         int inputRows = outputRows + 2;
         
         sendcounts[i] = inputRows * N;
-        displs[i] = sum;
+        inputDispls[i] = sum;
+        outputDispls[i] = sum + 1;
         sum += outputRows* N;
     }
 
@@ -78,8 +80,8 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
     for (int i = 1; i < local_rows + 1; i++) {
         for (int j = 1; j < N - 1; j++) {
             sum = data[i-1][j-1] +   data[i-1][j] +   data[i-1][j+1] +
-                      data[i][j-1]   + 2*data[i][j]   +   data[i][j+1]   +
-                      data[i+1][j-1] +   data[i+1][j] +   data[i+1][j+1];
+                      data[i][j-1]  + 2*data[i][j] + data[i][j+1]   +
+                      data[i+1][j-1] + data[i+1][j] + data[i+1][j+1];
             result[i-1][j] = (uint8_t)(sum / 10);
         }
     }
@@ -100,7 +102,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
 
 void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap) {
     
-    MPI_Gatherv(updated_buff, sendcounts[rank], MPI_UINT8_T, 
+    MPI_Gatherv(updated_buff, sendcounts[rank] - 2*N, MPI_UINT8_T, 
                 Ap, sendcounts, displs, MPI_UINT8_T, 
                 0, MPI_COMM_WORLD);
 
