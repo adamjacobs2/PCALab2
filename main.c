@@ -143,7 +143,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
     return ptr;
 }
 
-void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap) {
+void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap, uint8_t* A) {
     
     MPI_Gatherv(updated_buff, recvcounts[rank], MPI_UINT8_T, 
                 Ap, recvcounts, outputDispls, MPI_UINT8_T, 
@@ -151,6 +151,13 @@ void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap) {
 
     if (rank == 0) {
         uint8_t (*result)[N] = (uint8_t (*)[N]) Ap;
+        uint8_t (*Aptr)[N] = (uint8_t (*)[N]) A;
+
+        //copy first and last row of input matrix into Ap 
+        for(int j = 0; j < N; j++){
+            result[0][j] = Aptr[0][j];
+            result[N-1][j] = Aptr[0][j];
+        }
         
         printf("Updated Data Matrix\n");
         for (int i = 0; i < N; i++) {
@@ -188,7 +195,7 @@ int main(int argc, char **argv) {
 
     uint8_t *temp1 = distribute_data(A, N);
     uint8_t *temp2 = mask_operation(temp1, N);
-    collect_results(temp2, N, Ap);
+    collect_results(temp2, N, Ap, A);
 
     // Cleanup
     if (rank == 0) {
