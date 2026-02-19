@@ -5,11 +5,11 @@
 #SBATCH --account=eel6763
 #SBATCH --qos=eel6763
 #SBATCH --nodes=1
-#SBATCH --ntasks=8
-#SBATCH --ntasks-per-node=8
+#SBATCH --ntasks=32
+#SBATCH --ntasks-per-node=32
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=1000mb
-#SBATCH -t 00:05:00
-#SBATCH -o myoutput
+#SBATCH -t 00:05:00	
+#SBATCH -o OutputR32N1000
 #SBATCH -e myerr
-srun --mpi=$HPC_PMIX ./main 15
+srun --mpi=$HPC_PMIX ./main 1000
