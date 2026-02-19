@@ -96,8 +96,24 @@ uint8_t* distribute_data(uint8_t *A, int N) {
 
 
 #ifndef TIMING
+
+    if(rank == 0){
+        printf ("\n");
+        printf ("ScatterV send_counts[0-3] and displs[0-3]:\n");
+        printf ("sendcounts[0] = %d", sendcounts[0]);
+        printf ("sendcounts[1] = %d", sendcounts[1]);
+        printf ("sendcounts[2] = %d", sendcounts[2]);
+        printf ("sendcounts[3] = %d", sendcounts[3]);
+        printf ("displs[0] = %d", inputDispls[0]);
+        printf ("displs[1] = %d", inputDispls[1]);
+        printf ("displs[2] = %d", inputDispls[2]);
+        printf ("displs[3] = %d", inputDispls[3]);
+
+    }
+    
+
     printf ("\n");
-    printf ("rank %d recv buff:\n", rank);
+    printf ("Rank %d recv buff:\n", rank);
 
     uint8_t (*data)[N] = (uint8_t (*)[N]) local_buf;
         for (int i = 0; i < sendcounts[rank] / N; i++) {
@@ -106,6 +122,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
             }
             printf ("\n");
         }
+    fflush(stdout);
 #endif
     return local_buf;
 }
@@ -136,7 +153,7 @@ uint8_t* mask_operation(uint8_t *recv_buff, int N) {
 
 #ifndef TIMING
     printf ("\n");
-    printf ("rank %d result:\n", rank);
+    printf ("Updated values for rank %d\n", rank);
 
     
     for (int i = 0; i < local_rows; i++) {
@@ -170,9 +187,22 @@ void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap, uint8_t* A) {
         end = now();
         time_spent = tdiff(begin, end);
 
-        printf("Time spent: %f\n", time_spent);
-        fflush(stdout);
+        
 #ifndef TIMING
+
+if(rank == 0){
+        printf ("\n");
+        printf ("GatherV send_counts[0-3] and displs[0-3]:\n");
+        printf ("sendcounts[0] = %d", recvcounts[0]);
+        printf ("sendcounts[1] = %d", recvcounts[1]);
+        printf ("sendcounts[2] = %d", recvcounts[2]);
+        printf ("sendcounts[3] = %d", recvcounts[3]);
+        printf ("displs[0] = %d", outputDispls[0]);
+        printf ("displs[1] = %d", outputDispls[1]);
+        printf ("displs[2] = %d", outputDispls[2]);
+        printf ("displs[3] = %d", outputDispls[3]);
+
+    }
         printf("Updated Data Matrix\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -181,8 +211,12 @@ void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap, uint8_t* A) {
             }
             printf("\n");
         }
+        printf("\n");
         fflush(stdout);
 #endif
+
+    printf("Total time taken: %f seconds\n", time_spent);
+    fflush(stdout);
     }
 }
 /*************************************************** */
