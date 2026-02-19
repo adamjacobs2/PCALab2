@@ -73,7 +73,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
         initialize_data(A, N);
 
 #ifndef TIMING
-        printf ("\nInital %d X %d Matrix:\n", N, N);
+        printf ("\nInitial %d X %d Matrix:\n", N, N);
         uint8_t (*data)[N] = (uint8_t (*)[N]) A;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
