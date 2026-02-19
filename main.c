@@ -73,9 +73,7 @@ uint8_t* distribute_data(uint8_t *A, int N) {
         initialize_data(A, N);
 
 #ifndef TIMING
-        printf ("\n");
-        printf ("%d X %d data matrix:", N, N);
-        printf ("\n");       
+        printf ("\nInital %d X %d Matrix:\n", N, N);
         uint8_t (*data)[N] = (uint8_t (*)[N]) A;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -100,14 +98,14 @@ uint8_t* distribute_data(uint8_t *A, int N) {
     if(rank == 0){
         printf ("\n");
         printf ("ScatterV send_counts[0-3] and displs[0-3]:\n");
-        printf ("sendcounts[0] = %d", sendcounts[0]);
-        printf ("sendcounts[1] = %d", sendcounts[1]);
-        printf ("sendcounts[2] = %d", sendcounts[2]);
-        printf ("sendcounts[3] = %d", sendcounts[3]);
-        printf ("displs[0] = %d", inputDispls[0]);
-        printf ("displs[1] = %d", inputDispls[1]);
-        printf ("displs[2] = %d", inputDispls[2]);
-        printf ("displs[3] = %d", inputDispls[3]);
+        printf ("sendcounts[0] = %d\n", sendcounts[0]);
+        printf ("sendcounts[1] = %d\n", sendcounts[1]);
+        printf ("sendcounts[2] = %d\n", sendcounts[2]);
+        printf ("sendcounts[3] = %d\n", sendcounts[3]);
+        printf ("displs[0] = %d\n", inputDispls[0]);
+        printf ("displs[1] = %d\n", inputDispls[1]);
+        printf ("displs[2] = %d\n", inputDispls[2]);
+        printf ("displs[3] = %d\n", inputDispls[3]);
 
     }
     
@@ -193,14 +191,14 @@ void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap, uint8_t* A) {
 if(rank == 0){
         printf ("\n");
         printf ("GatherV send_counts[0-3] and displs[0-3]:\n");
-        printf ("sendcounts[0] = %d", recvcounts[0]);
-        printf ("sendcounts[1] = %d", recvcounts[1]);
-        printf ("sendcounts[2] = %d", recvcounts[2]);
-        printf ("sendcounts[3] = %d", recvcounts[3]);
-        printf ("displs[0] = %d", outputDispls[0]);
-        printf ("displs[1] = %d", outputDispls[1]);
-        printf ("displs[2] = %d", outputDispls[2]);
-        printf ("displs[3] = %d", outputDispls[3]);
+        printf ("sendcounts[0] = %d\n", recvcounts[0]);
+        printf ("sendcounts[1] = %d\n", recvcounts[1]);
+        printf ("sendcounts[2] = %d\n", recvcounts[2]);
+        printf ("sendcounts[3] = %d\n", recvcounts[3]);
+        printf ("displs[0] = %d\n", outputDispls[0]);
+        printf ("displs[1] = %d\n", outputDispls[1]);
+        printf ("displs[2] = %d\n", outputDispls[2]);
+        printf ("displs[3] = %d\n\n", outputDispls[3]);
 
     }
         printf("Updated Data Matrix\n");
