@@ -179,7 +179,7 @@ void collect_results(uint8_t *updated_buff, int N, uint8_t *Ap, uint8_t* A) {
         //copy first and last row of input matrix into Ap 
         for(int j = 0; j < N; j++){
             result[0][j] = Aptr[0][j];
-            result[N-1][j] = Aptr[0][j];
+            result[N-1][j] = Aptr[N-1][j];
         }
 
         end = now();
